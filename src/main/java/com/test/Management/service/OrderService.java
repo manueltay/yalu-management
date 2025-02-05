@@ -11,6 +11,7 @@ import com.test.Management.sales.model.Customer;
 import com.test.Management.sales.model.Product;
 import com.test.Management.sales.model.Purchase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,7 @@ public class OrderService {
         return productRepository.save(product);
     }
 
+    @CacheEvict(cacheNames = "products", key = "#id")
     public Mono<ResponseEntity<Object>> deleteProduct(@PathVariable String id) {
         return productRepository.findById(id)
                 .flatMap(existingProduct ->
